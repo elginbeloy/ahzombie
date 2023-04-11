@@ -25,11 +25,13 @@ gun_icon_image = pygame.transform.scale(gun_icon_image, (300, 100))
 crosshair_image = pygame.image.load("./crosshair.png")
 crosshair_image = pygame.transform.scale(crosshair_image, (100, 100))
 
-ammo = 10 # should take this into account before making reload
+MAX_AMMO = 10
+ammo = MAX_AMMO
 RELOADING_TIME = 20
 reloading_progress = 0
 reloading_bar_height = 20
 reloading_bar_color = (255, 0, 0)
+ammo_bar_color = (255, 215, 0)
 
 
 class Zombie(pygame.sprite.Sprite):
@@ -66,14 +68,12 @@ while True:
             pygame.quit()
             exit()
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            if reloading_progress == RELOADING_TIME:
-                # Reset reloading progress after shooting
-                reloading_progress = 0
+            if ammo > 0:
+                ammo -= 1
                 cur_pos = pygame.mouse.get_pos()
                 blast_position = cur_pos
                 blast_timer = BLAST_DURATION
 
-                # Check for collisions between blast and zombies
                 blast = Blast(blast_position)
                 collided_zombies = pygame.sprite.spritecollide(
                     blast, zombie_group, dokill=True, collided=None
@@ -81,6 +81,10 @@ while True:
                 for zombie in collided_zombies:
                     zombie.image = dead_zombie_image
                 dead_zombie_group.add(collided_zombies)
+                
+            if ammo == 0 and reloading_progress == RELOADING_TIME:
+                ammo = MAX_AMMO
+                reloading_progress = 0
 
     window.fill(BG_COLOR)
 
@@ -100,10 +104,14 @@ while True:
     # Draw gun icon and reloading bar
     window.blit(gun_icon_image, (GAME_WIDTH - 300, 0))
     reloading_bar_width = int((reloading_progress / RELOADING_TIME) * 300)
-    pygame.draw.rect(window, reloading_bar_color, (GAME_WIDTH - 300, 100, reloading_bar_width, reloading_bar_height))
-
+    if reloading_bar_width > 0:
+        pygame.draw.rect(window, reloading_bar_color, (GAME_WIDTH - 300, 100, reloading_bar_width, reloading_bar_height))
+    else:
+        ammo_bar_width = int((ammo / MAX_AMMO) * 300)
+        pygame.draw.rect(window, ammo_bar_color, (GAME_WIDTH - 300, 100, ammo_bar_width, reloading_bar_height))
+    
     # Update reloading progress
-    if reloading_progress < RELOADING_TIME:
+    if reloading_progress < RELOADING_TIME and ammo == 0:
         reloading_progress += 1
         
     pygame.display.update()
