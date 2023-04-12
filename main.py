@@ -5,6 +5,7 @@
 import pygame
 from constants import *
 from functions import *
+from avatar import Avatar
 from game_state import GameState
 from zombie import Zombie, ZombieGroup
 
@@ -17,6 +18,7 @@ def main():
 
     clock = pygame.time.Clock()
 
+    avatar = Avatar(GAME_WIDTH / 2, GAME_HEIGHT / 2)
     zombie_group = ZombieGroup()
     dead_zombie_group = pygame.sprite.Group()
 
@@ -30,8 +32,8 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 handle_mouse_click(game_state, zombie_group, dead_zombie_group)
 
-        render(window, game_state, zombie_group, dead_zombie_group)
-        update_game_state(game_state, zombie_group, dead_zombie_group)
+        render(window, game_state, avatar, zombie_group, dead_zombie_group)
+        update_game_state(game_state, avatar, zombie_group, dead_zombie_group)
 
         clock.tick(FPS)
 

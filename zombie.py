@@ -10,11 +10,27 @@ class Zombie(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
+    def update(self, avatar):
+      if random.randrange(0, 4) == 1:
+        if self.rect.x < avatar.rect.x:
+          self.rect.x += 1
+        elif self.rect.x > avatar.rect.x:
+          self.rect.x -= 1
+        
+        if self.rect.y < avatar.rect.y:
+          self.rect.y += 1
+        elif self.rect.y > avatar.rect.y:
+          self.rect.y -= 1
+
 class ZombieGroup(pygame.sprite.Group):
     def __init__(self):
         super().__init__()
-        for i in range(100):
+        for i in range(20):
             x = random.randint(0, GAME_WIDTH)
             y = random.randint(0, GAME_HEIGHT)
             zombie = Zombie(x, y)
             self.add(zombie)
+
+    def update(self, avatar):
+        for zombie in self.sprites():
+            zombie.update(avatar)

@@ -32,7 +32,7 @@ def handle_mouse_click(game_state, zombie_group, dead_zombie_group):
         game_state.ammo = MAX_AMMO
         game_state.reloading_progress = 0
 
-def render(window, game_state, zombie_group, dead_zombie_group):
+def render(window, game_state, avatar, zombie_group, dead_zombie_group):
     window.fill(BG_COLOR)
 
     mouse_position = pygame.mouse.get_pos()
@@ -41,6 +41,7 @@ def render(window, game_state, zombie_group, dead_zombie_group):
 
     zombie_group.draw(surface=window)
     dead_zombie_group.draw(surface=window)
+    window.blit(avatar.image, avatar.rect)
 
     # draw shots
     for pos in game_state.shots:
@@ -68,6 +69,8 @@ def render(window, game_state, zombie_group, dead_zombie_group):
 
     pygame.display.update()
 
-def update_game_state(game_state, zombie_group, dead_zombie_group):
+def update_game_state(game_state, avatar, zombie_group, dead_zombie_group):
+    avatar.update()
+    zombie_group.update(avatar)
     if game_state.reloading_progress < RELOADING_TIME and game_state.ammo == 0:
         game_state.reloading_progress += 1

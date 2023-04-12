@@ -10,6 +10,9 @@ GAME_HEIGHT = 800
 FPS = 40
 BG_COLOR = (90, 40, 0)
 
+avatar_image = pygame.image.load("./assets/avatar.png")
+avatar_image = pygame.transform.scale(avatar_image, (40, 40))
+
 zombie_image_1 = pygame.image.load("./assets/zombie_right.png")
 zombie_image_1 = pygame.transform.scale(zombie_image_1, (40, 40))
 zombie_image_2 = pygame.image.load("./assets/zombie_left.png")
