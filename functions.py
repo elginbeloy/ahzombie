@@ -39,8 +39,8 @@ def render(window, game_state):
     crosshair_rect = crosshair_image.get_rect()
     crosshair_rect.center = mouse_position
 
-    game_state.zombie_group.draw(surface=window)
     game_state.dead_zombie_group.draw(surface=window)
+    game_state.zombie_group.draw(surface=window)
     window.blit(game_state.avatar.image, game_state.avatar.rect)
 
     # draw shots

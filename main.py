@@ -1,7 +1,3 @@
-# TODO: Guy in middle of screen
-# TODO: zombies drop things guy goes to grab them you must kill zombies to protect him
-# TODO: You can build a base and upgrade it to protect him
-
 import pygame
 from constants import *
 from functions import *
