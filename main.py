@@ -16,7 +16,7 @@ def main():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
-            elif event.type == pygame.MOUSEBUTTONDOWN:
+            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 handle_mouse_click(game_state)
 
         render(window, game_state)

@@ -3,14 +3,13 @@
 AHZOMBIE! is a simple 2D zombie shooting game built with pygame.
 
 # Story
-You are ex-military special operations super sniper, Alice Skull.
+You are ex-special forces, greatest sniper of all time: Alice Skull.
 The world has ended but you are no quiter and have a plan to live.
 You find your friend from college, Xinyu, a scientist looking for
 the cure to this zombie disease. Xinyu thinks if she can gather 
 enough resources she should be able to make a vaccine. Act as a 
 sniper and eliminate the zombie hoards to protect Xinyu. This is
-just another mission for special operations Alice Skull. But the
-weight of the world is one your shoulders... or should I say aim.
+just another mission for special forces sniper Alice Skull.
 
 ![Game Screenshot](./assets/game_screenshot_1.png)
 
