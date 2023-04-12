@@ -17,3 +17,4 @@ class GameState:
         self.blast_position = None
         self.blast_timer = 0
         self.shots = []
+        self.loot = []

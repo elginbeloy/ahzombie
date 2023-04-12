@@ -1,4 +1,6 @@
 import pygame
+import random
+from loot import Loot
 from blast import Blast
 from constants import *
 
@@ -26,6 +28,8 @@ def handle_mouse_click(game_state):
         for zombie in collided_zombies:
             zombie.image = dead_zombie_image
             game_state.zombie_group.remove(zombie)
+            if random.randrange(0, LOOT_CHANCE) == 1:
+                game_state.loot.append(Loot(random.choice(LOOT), *zombie.rect.center))
         game_state.dead_zombie_group.add(collided_zombies)
 
     if game_state.ammo == 0 and game_state.reloading_progress == RELOADING_TIME:
@@ -40,12 +44,16 @@ def render(window, game_state):
     crosshair_rect.center = mouse_position
 
     game_state.dead_zombie_group.draw(surface=window)
-    game_state.zombie_group.draw(surface=window)
-    window.blit(game_state.avatar.image, game_state.avatar.rect)
-
+    # draw loot
+    for loot in game_state.loot:
+        window.blit(loot.image, loot.rect)
     # draw shots
     for pos in game_state.shots:
-        pygame.draw.circle(window, (0, 0, 0, 100), pos, 4)
+        pygame.draw.circle(window, (0, 0, 0), pos, 4)
+    # drive alive zombies
+    game_state.zombie_group.draw(surface=window)
+    # draw avatar
+    window.blit(game_state.avatar.image, game_state.avatar.rect)
 
     opacity_overlay = create_opacity_overlay(crosshair_rect)
     window.blit(opacity_overlay, (0, 0))
@@ -70,7 +78,11 @@ def render(window, game_state):
     pygame.display.update()
 
 def update_game_state(game_state):
-    game_state.avatar.update()
+    if len(game_state.loot) == 1:
+        game_state.avatar.desired_loot = game_state.loot[0]
+    elif len(game_state.loot) > 1:
+        game_state.avatar.desired_loot = min(game_state.loot, key=lambda loot: loot.distance_to(game_state.avatar.rect))
+    game_state.avatar.update(game_state)
     game_state.zombie_group.update(game_state.avatar)
     if game_state.reloading_progress < RELOADING_TIME and game_state.ammo == 0:
         game_state.reloading_progress += 1

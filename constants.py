@@ -9,9 +9,21 @@ GAME_WIDTH = 1200
 GAME_HEIGHT = 800
 FPS = 40
 BG_COLOR = (90, 40, 0)
+LOOT_CHANCE = 4 # 1 / LOOT_CHANCE
 
 avatar_image = pygame.image.load("./assets/avatar.png")
 avatar_image = pygame.transform.scale(avatar_image, (40, 40))
+
+wood_image = pygame.image.load("./assets/wood.png")
+wood_image = pygame.transform.scale(wood_image, (25, 25))
+
+ammo_image = pygame.image.load("./assets/ammo.png")
+ammo_image = pygame.transform.scale(ammo_image, (25, 25))
+
+metal_image = pygame.image.load("./assets/metal.png")
+metal_image = pygame.transform.scale(metal_image, (25, 25))
+
+LOOT = [ammo_image, wood_image, metal_image]
 
 zombie_image_1 = pygame.image.load("./assets/zombie_right.png")
 zombie_image_1 = pygame.transform.scale(zombie_image_1, (40, 40))
