@@ -4,7 +4,7 @@ AHZOMBIE! is a simple 2D zombie shooting game built with pygame.
 The game features a top-down perspective where players must 
 eliminate zombies as a sniper using a gun with limited ammo.
 
-![Game Screenshot](game_screenshot_1.png)
+![Game Screenshot](./assets/game_screenshot_1.png)
 
 ## How to Play
 
@@ -21,4 +21,4 @@ is the yellow bar present when reloading is complete.
 - bullet holes (with adjustable max)
 - cool gunshot audio (with mutli-channel audio layering)
 
-![Game Screenshot with Crosshair](game_screenshot_2.png)
+![Game Screenshot with Crosshair](./assets/game_screenshot_2.png)
