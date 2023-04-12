@@ -15,6 +15,12 @@ class Avatar(pygame.sprite.Sprite):
         if self.desired_loot != None:
             if self.rect.colliderect(self.desired_loot):
                 game_state.loot.remove(self.desired_loot)
+                if self.desired_loot.image == wood_image:
+                    game_state.wood += 1
+                elif self.desired_loot.image == metal_image:
+                    game_state.metal += 1
+                elif self.desired_loot.image == ammo_image:
+                    game_state.total_ammo += MAX_AMMO
                 self.desired_loot = None
             else:
                 if self.rect.x < self.desired_loot.rect.x:

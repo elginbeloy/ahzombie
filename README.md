@@ -24,3 +24,16 @@ The reloading progress is displayed as a red bar below the gun
 icon at the top-right corner of the screen. Magazine capacity 
 is the yellow bar present when reloading is complete. 
 - Gaurd Xinyu as she gathers resources for the vaccine.
+
+##  Todo
+
+1. Different gun types w/ different stats and ability to switch with number keys
+2. Zombies slowly spawn over time and come from outside screen
+3. More zombie types with different stats including health (total shots) and speed
+4. Right and left for each zombie type that transition with their direction
+5. Structures Xinyu will build when resources are available (at designated locations)
+6. Saftey structure for Xinyu to hide if press G (for Go) key (10 metal 25 wood)
+7. Gun structure to build/customize guns (50 metal 100 wood)
+(NOTE: MOVE ABILITY TO GET GUNS TO THIS SHOP INSTEAD OF HAVING ALL)
+8. Research structure (10 glass, 100 metal, 100 wood)
+9. Robot facility (100 glass, 1000 metal, 1000 wood)

@@ -4,6 +4,9 @@ from loot import Loot
 from blast import Blast
 from constants import *
 
+pygame.font.init()
+font = pygame.font.SysFont("Arial", 24)
+
 def create_opacity_overlay(crosshair_rect, opacity=192):
     overlay = pygame.Surface((GAME_WIDTH, GAME_HEIGHT), pygame.SRCALPHA)
     overlay.fill((0, 0, 0, opacity))
@@ -32,8 +35,9 @@ def handle_mouse_click(game_state):
                 game_state.loot.append(Loot(random.choice(LOOT), *zombie.rect.center))
         game_state.dead_zombie_group.add(collided_zombies)
 
-    if game_state.ammo == 0 and game_state.reloading_progress == RELOADING_TIME:
+    if game_state.ammo == 0 and game_state.reloading_progress == RELOADING_TIME and game_state.total_ammo > 0:
         game_state.ammo = MAX_AMMO
+        game_state.total_ammo -= MAX_AMMO
         game_state.reloading_progress = 0
 
 def render(window, game_state):
@@ -74,6 +78,18 @@ def render(window, game_state):
     else:
         ammo_bar_width = int((game_state.ammo / MAX_AMMO) * 300)
         pygame.draw.rect(window, ammo_bar_color, (GAME_WIDTH - 300, 100, ammo_bar_width, reloading_bar_height))
+
+    # Draw resource amounts
+    ammo_amount_text = font.render(str(game_state.total_ammo), True, (255, 255, 255))
+    metal_amount_text = font.render(str(game_state.metal), True, (255, 255, 255))
+    wood_amount_text = font.render(str(game_state.wood), True, (255, 255, 255))
+    window.blit(ammo_image, (0, 40))
+    window.blit(metal_image, (0, 80))
+    window.blit(wood_image, (0, 120))
+    window.blit(ammo_amount_text, (40, 40))
+    window.blit(metal_amount_text, (40, 80))
+    window.blit(wood_amount_text, (40, 120))
+
 
     pygame.display.update()
 
