@@ -10,11 +10,11 @@ def create_opacity_overlay(crosshair_rect, opacity=192):
     pygame.draw.circle(overlay, (0, 0, 0, 0), circle_pos, circle_radius)
     return overlay
 
-def handle_mouse_click(game_state, zombie_group, dead_zombie_group):
+def handle_mouse_click(game_state):
     if game_state.ammo > 0:
         game_state.ammo -= 1
-        game_state.gunshot_channels[game_state.current_channel].play(gunshot_sound)
         game_state.current_channel = (game_state.current_channel + 1) % game_state.num_channels
+        game_state.gunshot_channels[game_state.current_channel].play(gunshot_sound)
         cur_pos = pygame.mouse.get_pos()
         game_state.shots.append(cur_pos)
         if len(game_state.shots) > MAX_SHOTS:
@@ -22,26 +22,26 @@ def handle_mouse_click(game_state, zombie_group, dead_zombie_group):
         game_state.blast_position = cur_pos
         game_state.blast_timer = BLAST_DURATION
         tiny_blast_rect = pygame.Rect(cur_pos[0] - 4, cur_pos[1] - 4, 8, 8)
-        collided_zombies = [zombie for zombie in zombie_group if tiny_blast_rect.colliderect(zombie.rect)]
+        collided_zombies = [zombie for zombie in game_state.zombie_group if tiny_blast_rect.colliderect(zombie.rect)]
         for zombie in collided_zombies:
             zombie.image = dead_zombie_image
-            zombie_group.remove(zombie)
-        dead_zombie_group.add(collided_zombies)
+            game_state.zombie_group.remove(zombie)
+        game_state.dead_zombie_group.add(collided_zombies)
 
     if game_state.ammo == 0 and game_state.reloading_progress == RELOADING_TIME:
         game_state.ammo = MAX_AMMO
         game_state.reloading_progress = 0
 
-def render(window, game_state, avatar, zombie_group, dead_zombie_group):
+def render(window, game_state):
     window.fill(BG_COLOR)
 
     mouse_position = pygame.mouse.get_pos()
     crosshair_rect = crosshair_image.get_rect()
     crosshair_rect.center = mouse_position
 
-    zombie_group.draw(surface=window)
-    dead_zombie_group.draw(surface=window)
-    window.blit(avatar.image, avatar.rect)
+    game_state.zombie_group.draw(surface=window)
+    game_state.dead_zombie_group.draw(surface=window)
+    window.blit(game_state.avatar.image, game_state.avatar.rect)
 
     # draw shots
     for pos in game_state.shots:
@@ -69,8 +69,8 @@ def render(window, game_state, avatar, zombie_group, dead_zombie_group):
 
     pygame.display.update()
 
-def update_game_state(game_state, avatar, zombie_group, dead_zombie_group):
-    avatar.update()
-    zombie_group.update(avatar)
+def update_game_state(game_state):
+    game_state.avatar.update()
+    game_state.zombie_group.update(game_state.avatar)
     if game_state.reloading_progress < RELOADING_TIME and game_state.ammo == 0:
         game_state.reloading_progress += 1
