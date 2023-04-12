@@ -5,7 +5,15 @@
 import random
 import pygame
 
+pygame.mixer.pre_init(44100, -16, 2, 512)  # frequency, size, channels, buffer size
 pygame.init()
+
+gunshot_sound = pygame.mixer.Sound('bang.wav')
+gunshot_sound.set_volume(0.2)
+num_channels = 5
+gunshot_channels = [pygame.mixer.Channel(i) for i in range(num_channels)]
+current_channel = 0
+
 
 GAME_WIDTH = 1200
 GAME_HEIGHT = 800
@@ -18,8 +26,12 @@ FPS = 40
 
 BG_COLOR = (90, 40, 0)
 
-zombie_image = pygame.image.load("./zombie_right.png")
-zombie_image = pygame.transform.scale(zombie_image, (40, 40))
+zombie_image_1 = pygame.image.load("./zombie_right.png")
+zombie_image_1 = pygame.transform.scale(zombie_image_1, (40, 40))
+zombie_image_2 = pygame.image.load("./zombie_left.png")
+zombie_image_2 = pygame.transform.scale(zombie_image_2, (40, 40))
+zombie_image_3 = pygame.image.load("./zombie.png")
+zombie_image_3 = pygame.transform.scale(zombie_image_3, (40, 40))
 dead_zombie_image = pygame.image.load("./dead_zombie.png")
 dead_zombie_image = pygame.transform.scale(dead_zombie_image, (40, 40))
 
@@ -29,7 +41,7 @@ gun_icon_image = pygame.transform.scale(gun_icon_image, (300, 100))
 crosshair_image = pygame.image.load("./crosshair.png")
 crosshair_image = pygame.transform.scale(crosshair_image, (200, 200))
 
-MAX_AMMO = 10
+MAX_AMMO = 40
 ammo = MAX_AMMO
 RELOADING_TIME = 20
 reloading_progress = 0
@@ -48,14 +60,14 @@ def create_opacity_overlay(crosshair_rect, opacity=192):
 class Zombie(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
-        self.image = zombie_image
+        self.image = random.choice([zombie_image_1, zombie_image_2, zombie_image_3])
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
 
 zombie_group = pygame.sprite.Group()
 dead_zombie_group = pygame.sprite.Group()
-for i in range(40):
+for i in range(50):
     x = random.randint(0, GAME_WIDTH)
     y = random.randint(0, GAME_HEIGHT)
     zombie = Zombie(x, y)
@@ -66,6 +78,7 @@ blast_image = pygame.transform.scale(blast_image, (120, 120))
 blast_position = None
 blast_timer = 0
 BLAST_DURATION = 2
+MAX_SHOTS = 80
 shots = []
 
 class Blast(pygame.sprite.Sprite):
@@ -82,9 +95,12 @@ while True:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if ammo > 0:
                 ammo -= 1
+                # Play the gunshot sound on the next channel
+                gunshot_channels[current_channel].play(gunshot_sound)
+                current_channel = (current_channel + 1) % num_channels
                 cur_pos = pygame.mouse.get_pos()
                 shots.append(cur_pos)
-                if len(shots) > 20:
+                if len(shots) > MAX_SHOTS:
                     shots.pop(0)
                 blast_position = cur_pos
                 blast_timer = BLAST_DURATION
