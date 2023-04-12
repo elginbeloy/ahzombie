@@ -66,6 +66,7 @@ blast_image = pygame.transform.scale(blast_image, (120, 120))
 blast_position = None
 blast_timer = 0
 BLAST_DURATION = 2
+shots = []
 
 class Blast(pygame.sprite.Sprite):
     def __init__(self, pos):
@@ -82,14 +83,13 @@ while True:
             if ammo > 0:
                 ammo -= 1
                 cur_pos = pygame.mouse.get_pos()
+                shots.append(cur_pos)
+                if len(shots) > 20:
+                    shots.pop(0)
                 blast_position = cur_pos
                 blast_timer = BLAST_DURATION
-
                 blast = Blast(blast_position)
-                # Create a tiny 8x8px rect for collision
                 tiny_blast_rect = pygame.Rect(cur_pos[0] - 4, cur_pos[1] - 4, 8, 8)
-
-                # Check for collisions between the tiny rect and zombies
                 collided_zombies = [zombie for zombie in zombie_group if tiny_blast_rect.colliderect(zombie.rect)]
                 for zombie in collided_zombies:
                     zombie.image = dead_zombie_image
@@ -108,6 +108,10 @@ while True:
 
     zombie_group.draw(surface=window)
     dead_zombie_group.draw(surface=window)
+
+    # draw shots
+    for pos in shots:
+        pygame.draw.circle(window, (0, 0, 0, 100), pos, 4)
 
     opacity_overlay = create_opacity_overlay(crosshair_rect)
     window.blit(opacity_overlay, (0, 0))
