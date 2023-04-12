@@ -1,3 +1,7 @@
+# TODO: Guy in middle of screen
+# TODO: zombies drop things guy goes to grab them you must kill zombies to protect him
+# TODO: You can build a base and upgrade it to protect him
+
 import random
 import pygame
 
@@ -14,7 +18,7 @@ FPS = 40
 
 BG_COLOR = (90, 40, 0)
 
-zombie_image = pygame.image.load("./zombie.png")
+zombie_image = pygame.image.load("./zombie_right.png")
 zombie_image = pygame.transform.scale(zombie_image, (40, 40))
 dead_zombie_image = pygame.image.load("./dead_zombie.png")
 dead_zombie_image = pygame.transform.scale(dead_zombie_image, (40, 40))
@@ -23,7 +27,7 @@ gun_icon_image = pygame.image.load("./gun_icon.png")
 gun_icon_image = pygame.transform.scale(gun_icon_image, (300, 100))
 
 crosshair_image = pygame.image.load("./crosshair.png")
-crosshair_image = pygame.transform.scale(crosshair_image, (100, 100))
+crosshair_image = pygame.transform.scale(crosshair_image, (200, 200))
 
 MAX_AMMO = 10
 ammo = MAX_AMMO
@@ -33,6 +37,13 @@ reloading_bar_height = 20
 reloading_bar_color = (255, 0, 0)
 ammo_bar_color = (255, 215, 0)
 
+def create_opacity_overlay(crosshair_rect, opacity=192):
+    overlay = pygame.Surface((GAME_WIDTH, GAME_HEIGHT), pygame.SRCALPHA)
+    overlay.fill((0, 0, 0, opacity))
+    circle_pos = crosshair_rect.center
+    circle_radius = crosshair_rect.width // 2
+    pygame.draw.circle(overlay, (0, 0, 0, 0), circle_pos, circle_radius)
+    return overlay
 
 class Zombie(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -44,17 +55,17 @@ class Zombie(pygame.sprite.Sprite):
 
 zombie_group = pygame.sprite.Group()
 dead_zombie_group = pygame.sprite.Group()
-for i in range(160):
+for i in range(40):
     x = random.randint(0, GAME_WIDTH)
     y = random.randint(0, GAME_HEIGHT)
     zombie = Zombie(x, y)
     zombie_group.add(zombie)
 
 blast_image = pygame.image.load("./blast.png")
-blast_image = pygame.transform.scale(blast_image, (40, 40))
+blast_image = pygame.transform.scale(blast_image, (120, 120))
 blast_position = None
 blast_timer = 0
-BLAST_DURATION = 4
+BLAST_DURATION = 2
 
 class Blast(pygame.sprite.Sprite):
     def __init__(self, pos):
@@ -75,11 +86,14 @@ while True:
                 blast_timer = BLAST_DURATION
 
                 blast = Blast(blast_position)
-                collided_zombies = pygame.sprite.spritecollide(
-                    blast, zombie_group, dokill=True, collided=None
-                )
+                # Create a tiny 8x8px rect for collision
+                tiny_blast_rect = pygame.Rect(cur_pos[0] - 4, cur_pos[1] - 4, 8, 8)
+
+                # Check for collisions between the tiny rect and zombies
+                collided_zombies = [zombie for zombie in zombie_group if tiny_blast_rect.colliderect(zombie.rect)]
                 for zombie in collided_zombies:
                     zombie.image = dead_zombie_image
+                    zombie_group.remove(zombie)
                 dead_zombie_group.add(collided_zombies)
                 
             if ammo == 0 and reloading_progress == RELOADING_TIME:
@@ -91,10 +105,14 @@ while True:
     mouse_position = pygame.mouse.get_pos()
     crosshair_rect = crosshair_image.get_rect()
     crosshair_rect.center = mouse_position
-    window.blit(crosshair_image, crosshair_rect)
 
     zombie_group.draw(surface=window)
     dead_zombie_group.draw(surface=window)
+
+    opacity_overlay = create_opacity_overlay(crosshair_rect)
+    window.blit(opacity_overlay, (0, 0))
+
+    window.blit(crosshair_image, crosshair_rect)
 
     # Render the blast effect if it's active
     if blast_position and blast_timer > 0:
