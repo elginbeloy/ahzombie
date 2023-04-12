@@ -13,7 +13,7 @@ class Zombie(pygame.sprite.Sprite):
 class ZombieGroup(pygame.sprite.Group):
     def __init__(self):
         super().__init__()
-        for i in range(50):
+        for i in range(100):
             x = random.randint(0, GAME_WIDTH)
             y = random.randint(0, GAME_HEIGHT)
             zombie = Zombie(x, y)
