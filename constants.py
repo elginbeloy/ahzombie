@@ -5,6 +5,9 @@ pygame.init()
 gunshot_sound = pygame.mixer.Sound('./assets/bang.wav')
 gunshot_sound.set_volume(0.2)
 
+reload_sound = pygame.mixer.Sound('./assets/reload.mp3')
+reload_sound.set_volume(0.4)
+
 GAME_WIDTH = 1200
 GAME_HEIGHT = 800
 FPS = 40
@@ -34,13 +37,7 @@ zombie_image_3 = pygame.transform.scale(zombie_image_3, (40, 40))
 dead_zombie_image = pygame.image.load("./assets/dead_zombie.png")
 dead_zombie_image = pygame.transform.scale(dead_zombie_image, (40, 40))
 
-gun_icon_image = pygame.image.load("./assets/gun_icon.png")
-gun_icon_image = pygame.transform.scale(gun_icon_image, (300, 100))
-
-crosshair_image = pygame.image.load("./assets/crosshair.png")
-crosshair_image = pygame.transform.scale(crosshair_image, (200, 200))
-
-MAX_AMMO = 40
+MAX_AMMO = 20
 RELOADING_TIME = 20
 reloading_bar_height = 20
 reloading_bar_color = (255, 0, 0)

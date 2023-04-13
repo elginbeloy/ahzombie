@@ -2,6 +2,7 @@ import pygame
 from zombie import Zombie, ZombieGroup
 from avatar import Avatar
 from constants import *
+from gun import main_rifle, smg
 
 class GameState:
     def __init__(self):
@@ -9,8 +10,8 @@ class GameState:
         self.zombie_group = ZombieGroup()
         self.dead_zombie_group = pygame.sprite.Group()
 
-        self.ammo = MAX_AMMO
-        self.total_ammo = 120
+        self.ammo = main_rifle.clip_size
+        self.total_ammo = 40
         self.wood = 0
         self.metal = 0
         self.reloading_progress = 0
@@ -21,3 +22,5 @@ class GameState:
         self.blast_timer = 0
         self.shots = []
         self.loot = []
+        self.current_gun = main_rifle
+        self.secondary_gun = smg

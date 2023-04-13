@@ -26,6 +26,7 @@ is the yellow bar present when reloading is complete.
 
 ##  Todo
 
+0. Make screen scroll with Xinyu as she explores and gets close to any edge (within 100px)
 1. Different gun types w/ different stats and ability to switch with number keys
 2. Zombies slowly spawn over time and come from outside screen
 3. More zombie types with different stats including health (total shots) and speed
