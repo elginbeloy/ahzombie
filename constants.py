@@ -6,7 +6,7 @@ gunshot_sound = pygame.mixer.Sound('./assets/bang.wav')
 gunshot_sound.set_volume(0.2)
 
 reload_sound = pygame.mixer.Sound('./assets/reload.mp3')
-reload_sound.set_volume(0.4)
+reload_sound.set_volume(1.0)
 
 GAME_WIDTH = 1200
 GAME_HEIGHT = 800

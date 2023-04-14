@@ -19,7 +19,9 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 handle_mouse_click(game_state)
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                game_state.secondary_gun, game_state.current_gun = game_state.current_gun, game_state.secondary_gun
+                game_state.current_gun_index = (game_state.current_gun_index + 1) % len(game_state.guns)
+                game_state.secondary_gun = game_state.current_gun
+                game_state.current_gun = game_state.guns[game_state.current_gun_index]
 
         render(window, game_state)
         update_game_state(game_state)
